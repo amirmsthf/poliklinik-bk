@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 11, 2024 at 03:37 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Generation Time: Dec 13, 2024 at 04:25 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,7 +33,7 @@ CREATE TABLE `daftar_poli` (
   `id_jadwal` int(11) NOT NULL,
   `keluhan` text NOT NULL,
   `no_antrian` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -45,7 +45,7 @@ CREATE TABLE `detail_periksa` (
   `id` int(11) NOT NULL,
   `id_periksa` int(11) NOT NULL,
   `id_obat` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -56,18 +56,18 @@ CREATE TABLE `detail_periksa` (
 CREATE TABLE `dokter` (
   `id` int(11) NOT NULL,
   `nama` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `alamat` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `no_hp` varchar(15) NOT NULL,
   `id_poli` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `dokter`
 --
 
-INSERT INTO `dokter` (`id`, `nama`, `email`, `password`, `no_hp`, `id_poli`) VALUES
-(5, 'Dr.Yoru', 'yoru@gmail.com', '$2y$10$QlJ/O0dsxj6YexrJrz6Tzes4dzYLded.qN4zorhw/lJBvAm7nk6T.', '321321321321', 9);
+INSERT INTO `dokter` (`id`, `nama`, `alamat`, `password`, `no_hp`, `id_poli`) VALUES
+(1, 'Ifan', 'Semarang', '$2y$10$ZVJUjhui9YJ9x/YKLI/Gd.GjASuuYnKEW0ac/VLApwheVhzJqjFee', '123', 1);
 
 -- --------------------------------------------------------
 
@@ -81,7 +81,7 @@ CREATE TABLE `jadwal_periksa` (
   `hari` varchar(10) NOT NULL,
   `jam_mulai` time NOT NULL,
   `jam_selesai` time NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -94,14 +94,15 @@ CREATE TABLE `obat` (
   `nama_obat` varchar(50) NOT NULL,
   `kemasan` varchar(35) DEFAULT NULL,
   `harga` int(10) UNSIGNED DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `obat`
 --
 
 INSERT INTO `obat` (`id`, `nama_obat`, `kemasan`, `harga`) VALUES
-(2, 'Albendazol', 'ktk 5 x 6 tablet @', 15000);
+(1, 'OBH Combi', 'Botol', 20000),
+(2, 'Bodrex', 'Tablet', 13000);
 
 -- --------------------------------------------------------
 
@@ -112,12 +113,20 @@ INSERT INTO `obat` (`id`, `nama_obat`, `kemasan`, `harga`) VALUES
 CREATE TABLE `pasien` (
   `id` int(11) NOT NULL,
   `nama` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `alamat` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `no_ktp` varchar(20) NOT NULL,
   `no_hp` varchar(20) NOT NULL,
   `no_rm` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `pasien`
+--
+
+INSERT INTO `pasien` (`id`, `nama`, `alamat`, `password`, `no_ktp`, `no_hp`, `no_rm`) VALUES
+(1, 'Amir', 'Sragen', '$2y$10$0OSz8aAtIoeFtb3nCFvf3.G4DVSOhdMylhdVaCfAe.UdtNnfwkU1K', '123', '123', '202412-001'),
+(2, 'Adi', 'Semarang', '$2y$10$1fzBFMxyuZhP8UR3YpnghOj.PZlidljHMr4xlRmRCY9DC836DyOPm', '123', '123', '202412-002');
 
 -- --------------------------------------------------------
 
@@ -131,7 +140,7 @@ CREATE TABLE `periksa` (
   `tgl_periksa` date NOT NULL,
   `catatan` text NOT NULL,
   `biaya_periksa` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -143,14 +152,15 @@ CREATE TABLE `poli` (
   `id` int(11) NOT NULL,
   `nama_poli` varchar(255) NOT NULL,
   `deskripsi` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `poli`
 --
 
 INSERT INTO `poli` (`id`, `nama_poli`, `deskripsi`) VALUES
-(9, 'Poli Gigi', 'hehe');
+(1, 'Poli Umum', 'Umum'),
+(2, 'Poli Gigi', 'Khusus untuk gigi');
 
 --
 -- Indexes for dumped tables
@@ -177,7 +187,7 @@ ALTER TABLE `detail_periksa`
 --
 ALTER TABLE `dokter`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `alamat` (`alamat`) USING BTREE,
   ADD KEY `id_poli` (`id_poli`);
 
 --
@@ -198,7 +208,7 @@ ALTER TABLE `obat`
 --
 ALTER TABLE `pasien`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD UNIQUE KEY `alamat` (`alamat`) USING BTREE;
 
 --
 -- Indexes for table `periksa`
@@ -233,7 +243,7 @@ ALTER TABLE `detail_periksa`
 -- AUTO_INCREMENT for table `dokter`
 --
 ALTER TABLE `dokter`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `jadwal_periksa`
@@ -251,7 +261,7 @@ ALTER TABLE `obat`
 -- AUTO_INCREMENT for table `pasien`
 --
 ALTER TABLE `pasien`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `periksa`
@@ -263,7 +273,7 @@ ALTER TABLE `periksa`
 -- AUTO_INCREMENT for table `poli`
 --
 ALTER TABLE `poli`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
